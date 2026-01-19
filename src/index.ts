@@ -52,7 +52,7 @@ tasklist.forEach((task) => {
     const doneBtn = document.createElement("button") as HTMLButtonElement;
 
     doingBtn.classList.add("doing-btn");
-    doneBtn.classList.add("done-btn");
+    doneBtn.classList.add(("done-btn"));
 
     doingBtn.textContent = "Jobbar med";
     doneBtn.textContent = "Klart";
@@ -66,7 +66,9 @@ tasklist.forEach((task) => {
 
             let taskStatus = "doing";
 
+
             console.log("Jobbar med", task.chore), taskStatus;
+            item.classList.add("doing")
         })
 
         doneBtn.addEventListener("click", () => {
@@ -75,10 +77,11 @@ tasklist.forEach((task) => {
 
             item.classList.add("check");
 
+            // Removing the buttons from HTML, could be changed for a redo button
+            doneBtn.remove();
+            doingBtn.remove();
+
         })
-        // doneBtn.addEventListener("click", () => {
-        //     console.log("Du klarade det!")
-        // })
     }
 
 })

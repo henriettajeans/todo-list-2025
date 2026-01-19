@@ -19,6 +19,11 @@ html {
     color: grey;
 }
 
+
+.task-item.doing {
+    text-decoration: underline;
+}
+
 .task-item.check {
     text-decoration: line-through;
     color: blue;
