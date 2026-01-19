@@ -37,24 +37,48 @@ tasklist.forEach((task) => {
     const container = document.createElement("article");
     const item = document.createElement("span");
     const time = document.createElement("span");
-    const doingBtn = document.createElement("button") as HTMLButtonElement;
-    const doneBtn = document.createElement("button") as HTMLButtonElement;
+
 
     container.classList.add("task-container");
     item.classList.add("task-item");
     time.classList.add("task-time");
-    doingBtn.classList.add("doing-btn");
-    doneBtn.classList.add("done-btn");
+
 
     item.textContent = task.chore;
     time.textContent = task.time;
 
 
-    container.append(item, time, doingBtn, doneBtn);
+    const doingBtn = document.createElement("button") as HTMLButtonElement;
+    const doneBtn = document.createElement("button") as HTMLButtonElement;
 
+    doingBtn.classList.add("doing-btn");
+    doneBtn.classList.add("done-btn");
+
+    doingBtn.textContent = "Jobbar med";
+    doneBtn.textContent = "Klart";
+
+    container.append(item, time, doingBtn, doneBtn);
 
     if (wrapper) {
         wrapper.appendChild(container);
+
+        doingBtn.addEventListener("click", () => {
+
+            let taskStatus = "doing";
+
+            console.log("Jobbar med", task.chore), taskStatus;
+        })
+
+        doneBtn.addEventListener("click", () => {
+            let taskStatus = "done";
+            console.log("Du är klar med", task.chore, taskStatus);
+
+            item.classList.add("check");
+
+        })
+        // doneBtn.addEventListener("click", () => {
+        //     console.log("Du klarade det!")
+        // })
     }
 
 })

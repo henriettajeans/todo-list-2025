@@ -1,0 +1,25 @@
+html {
+    /* text-align: center; */
+    /* width: 80vw; */
+    margin: 3rem 20rem;
+
+    .wrapper {
+
+
+
+        form {
+            display: grid;
+        }
+
+
+    }
+}
+
+.task-item {
+    color: grey;
+}
+
+.task-item.check {
+    text-decoration: line-through;
+    color: blue;
+}
