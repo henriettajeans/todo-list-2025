@@ -17,16 +17,33 @@
     <div class="wrapper">
 
         <form class="form-section">
-            <label for="chore-input">Syssla:</label>
-            <input type="text" id="task-input" />
+            <label for="task-input">Syssla:</label>
+            <input type="text" id="task-input" required />
 
             <label for="time-input">Hur lång tid tar sysslan?</label>
-            <input type="number" id="time-input" /> <span>minuter</span>
+            <select id="time-input" required>
+                <option value="" selected disabled>Välj hur lång tid du vill lägga på sysslan</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+                <option value="45">45</option>
+                <option value="50">50</option>
+                <option value="55">55</option>
+                <option value="60">60</option>
+
+
+            </select>
+            <button class="submit-btn">Lägg till syssla</button>
         </form>
         <section class="list">
 
         </section>
-        <button class="submit-btn"></button>
+
     </div>
 
 </body>

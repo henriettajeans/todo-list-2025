@@ -20,69 +20,95 @@ const tasklist: ITask[] = [
         time: "50"
     }
 ]
-console.log("hej")
 
 // Variables
 
-const wrapper = document.querySelector(".wrapper");
+const wrapper = document.querySelector(".list");
 const form = document.querySelector(".form-section") as HTMLFormElement;
-const taskInput = document.querySelector("#chore-input") as HTMLInputElement;
-const timeInput = document.querySelector("#time-input") as HTMLInputElement;
+const taskInput = document.querySelector("#task-input") as HTMLInputElement;
+const timeInput = document.querySelector("#time-input") as HTMLSelectElement;
 const submitBtn = document.querySelector(".submit-btn") as HTMLButtonElement;
 
 let taskStatus = "waiting";
 console.log(taskStatus);
 
-tasklist.forEach((task) => {
-    const container = document.createElement("article");
-    const item = document.createElement("span");
-    const time = document.createElement("span");
-
-
-    container.classList.add("task-container");
-    item.classList.add("task-item");
-    time.classList.add("task-time");
-
-
-    item.textContent = task.chore;
-    time.textContent = task.time;
-
-
-    const doingBtn = document.createElement("button") as HTMLButtonElement;
-    const doneBtn = document.createElement("button") as HTMLButtonElement;
-
-    doingBtn.classList.add("doing-btn");
-    doneBtn.classList.add(("done-btn"));
-
-    doingBtn.textContent = "Jobbar med";
-    doneBtn.textContent = "Klart";
-
-    container.append(item, time, doingBtn, doneBtn);
-
+function renderTasks() {
     if (wrapper) {
-        wrapper.appendChild(container);
-
-        doingBtn.addEventListener("click", () => {
-
-            let taskStatus = "doing";
-
-
-            console.log("Jobbar med", task.chore), taskStatus;
-            item.classList.add("doing")
-        })
-
-        doneBtn.addEventListener("click", () => {
-            let taskStatus = "done";
-            console.log("Du är klar med", task.chore, taskStatus);
-
-            item.classList.add("check");
-
-            // Removing the buttons from HTML, could be changed for a redo button
-            doneBtn.remove();
-            doingBtn.remove();
-
-        })
+        wrapper.replaceChildren();
     }
+    tasklist.forEach(({ chore, time }) => {
+        const container = document.createElement("article");
+        const item = document.createElement("span");
+        const timeSpan = document.createElement("span");
 
+
+        container.classList.add("task-container");
+        item.classList.add("task-item");
+        timeSpan.classList.add("task-time");
+
+
+        item.textContent = chore;
+        timeSpan.textContent = time;
+
+
+        const doingBtn = document.createElement("button") as HTMLButtonElement;
+        const doneBtn = document.createElement("button") as HTMLButtonElement;
+
+        doingBtn.classList.add("doing-btn");
+        doneBtn.classList.add(("done-btn"));
+
+        doingBtn.textContent = "Jobbar med";
+        doneBtn.textContent = "Klart";
+
+        container.append(item, time, doingBtn, doneBtn);
+
+        if (wrapper) {
+            wrapper.appendChild(container);
+
+            doingBtn.addEventListener("click", () => {
+
+                let taskStatus = "doing";
+
+                console.log("Jobbar med", chore), taskStatus;
+                item.classList.add("doing")
+            })
+
+            doneBtn.addEventListener("click", () => {
+                let taskStatus = "done";
+                console.log("Du är klar med", chore, taskStatus);
+
+                item.classList.add("check");
+
+                // Removing the buttons from HTML, could be changed for a redo button
+                doneBtn.remove();
+                doingBtn.remove();
+
+            })
+        }
+
+    })
+
+}
+renderTasks();
+
+// Form logic
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!taskInput || !timeInput) return;
+
+    const task = taskInput.value;
+    const time = timeInput.value;
+    console.log("!")
+
+    const newTask: ITask = {
+        id: Date.now(),
+        chore: task,
+        time: time
+    }
+    tasklist.push(newTask);
+    console.log(newTask);
+    renderTasks();
+    form.reset();
 })
-
+console.log(form, taskInput, timeInput);

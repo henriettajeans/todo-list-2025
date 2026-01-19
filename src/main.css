@@ -3,6 +3,28 @@ html {
     /* width: 80vw; */
     margin: 3rem 20rem;
 
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    label,
+    a,
+    ul,
+    li,
+    ol,
+    a,
+    p,
+    select,
+    option,
+    input,
+    span,
+    button {
+        font-size: 1.2rem;
+        margin: 0.2em;
+    }
+
     .wrapper {
 
 
