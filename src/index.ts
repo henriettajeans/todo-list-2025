@@ -4,22 +4,31 @@ interface ITask {
     id: number,
     chore: string,
     time: string,
+    status: taskStatus
 }
 
 type taskStatus = "waiting" | "doing" | "done";
 
 const tasklist: ITask[] = [
-    {
-        id: 1,
-        chore: "Städa köket",
-        time: "40"
-    },
-    {
-        id: 2,
-        chore: "Diska",
-        time: "50"
-    }
+    // {
+    //     id: 1,
+    //     chore: "Städa köket",
+    //     time: "40"
+    // },
+    // {
+    //     id: 2,
+    //     chore: "Diska",
+    //     time: "50"
+    // }
 ]
+
+// If there is data in local storage, get it
+const savedTasks = localStorage.getItem("tasks");
+
+if (savedTasks) {
+    const parsedTasks: ITask[] = JSON.parse(savedTasks);
+    tasklist.push(...parsedTasks);
+}
 
 // Variables
 
@@ -32,11 +41,16 @@ const submitBtn = document.querySelector(".submit-btn") as HTMLButtonElement;
 let taskStatus = "waiting";
 console.log(taskStatus);
 
+
+
 function renderTasks() {
+
     if (wrapper) {
         wrapper.replaceChildren();
     }
-    tasklist.forEach(({ chore, time }) => {
+    tasklist.forEach((task) => {
+        const { chore, time, status } = task;
+
         const container = document.createElement("article");
         const item = document.createElement("span");
         const timeSpan = document.createElement("span");
@@ -50,6 +64,12 @@ function renderTasks() {
         item.textContent = chore;
         timeSpan.textContent = time;
 
+        // Set types for classes here but it did not work
+        // if (taskStatus === "doing") {
+        //     item.classList.add("doing");
+        // } else if (taskStatus === "done") {
+        //     item.classList.add("check");
+        // }
 
         const doingBtn = document.createElement("button") as HTMLButtonElement;
         const doneBtn = document.createElement("button") as HTMLButtonElement;
@@ -60,6 +80,13 @@ function renderTasks() {
         doingBtn.textContent = "Jobbar med";
         doneBtn.textContent = "Klart";
 
+        if (status === "doing") item.classList.add("doing");
+        if (status === "done") {
+            item.classList.add("check");
+            doingBtn.remove();
+            doneBtn.remove();
+        }
+
         container.append(item, time, doingBtn, doneBtn);
 
         if (wrapper) {
@@ -67,21 +94,25 @@ function renderTasks() {
 
             doingBtn.addEventListener("click", () => {
 
-                let taskStatus = "doing";
+                task.status = "doing";
 
                 console.log("Jobbar med", chore), taskStatus;
                 item.classList.add("doing")
             })
 
             doneBtn.addEventListener("click", () => {
-                let taskStatus = "done";
+                item.classList.add("check");
+                task.status = "done";
+                localStorage.setItem("tasks", JSON.stringify(tasklist));
                 console.log("Du är klar med", chore, taskStatus);
 
-                item.classList.add("check");
 
                 // Removing the buttons from HTML, could be changed for a redo button
                 doneBtn.remove();
                 doingBtn.remove();
+                localStorage.setItem("tasks", JSON.stringify(tasklist));
+                console.log(taskStatus)
+
 
             })
         }
@@ -89,12 +120,7 @@ function renderTasks() {
     })
 
 }
-const savedTasks = localStorage.getItem("tasks");
 
-if (savedTasks) {
-    const parsedTasks: ITask[] = JSON.parse(savedTasks);
-    tasklist.push(...parsedTasks);
-}
 renderTasks();
 
 // Form logic
@@ -110,9 +136,11 @@ form.addEventListener("submit", (e) => {
     const newTask: ITask = {
         id: Date.now(),
         chore: task,
-        time: time
+        time: time,
+        status: "waiting"
     }
     tasklist.push(newTask);
+
     localStorage.setItem("tasks", JSON.stringify(tasklist));
     console.log(newTask);
     renderTasks();
