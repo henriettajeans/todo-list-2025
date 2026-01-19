@@ -89,6 +89,12 @@ function renderTasks() {
     })
 
 }
+const savedTasks = localStorage.getItem("tasks");
+
+if (savedTasks) {
+    const parsedTasks: ITask[] = JSON.parse(savedTasks);
+    tasklist.push(...parsedTasks);
+}
 renderTasks();
 
 // Form logic
@@ -107,8 +113,10 @@ form.addEventListener("submit", (e) => {
         time: time
     }
     tasklist.push(newTask);
+    localStorage.setItem("tasks", JSON.stringify(tasklist));
     console.log(newTask);
     renderTasks();
     form.reset();
+    // localStorage.setItem(newTask);
 })
 console.log(form, taskInput, timeInput);
