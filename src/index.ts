@@ -23,12 +23,17 @@ const tasklist: ITask[] = [
 ]
 
 // If there is data in local storage, get it
-const savedTasks = localStorage.getItem("tasks");
+const loadFromLocalStorage = () => {
+    const savedTasks = localStorage.getItem("tasks");
 
-if (savedTasks) {
-    const parsedTasks: ITask[] = JSON.parse(savedTasks);
-    tasklist.push(...parsedTasks);
+    if (savedTasks) {
+        const parsedTasks: ITask[] = JSON.parse(savedTasks) as ITask[];
+        tasklist.push(...parsedTasks);
+
+        renderTasks();
+    }
 }
+
 
 // Variables
 
@@ -41,15 +46,29 @@ const submitBtn = document.querySelector(".submit-btn") as HTMLButtonElement;
 let taskStatus = "waiting";
 console.log(taskStatus);
 
+if (wrapper) {
+    wrapper.addEventListener("click", (event) => {
+
+        const target = event.target as HTMLElement;
+        const container = target.closest(".task-container") as HTMLElement;
+        if (!container) return;
+
+        console.log("Du har klickat i: ", target);
+        console.log("som tur var så hittade closest: ", container)
+    })
 
 
+
+}
+
+// Loop and render data in HTML
 function renderTasks() {
 
     if (wrapper) {
         wrapper.replaceChildren();
     }
     tasklist.forEach((task) => {
-        const { chore, time, status } = task;
+        const { chore, time, status, id } = task;
 
         const container = document.createElement("article");
         const item = document.createElement("span");
@@ -59,6 +78,9 @@ function renderTasks() {
         container.classList.add("task-container");
         item.classList.add("task-item");
         timeSpan.classList.add("task-time");
+
+        container.dataset.id = id.toString();
+
 
 
         item.textContent = chore;
@@ -80,11 +102,14 @@ function renderTasks() {
         doingBtn.textContent = "Jobbar med";
         doneBtn.textContent = "Klart";
 
-        if (status === "doing") item.classList.add("doing");
+        if (status === "doing") {
+            item.classList.add("doing")
+            // doingBtn.remove();
+        };
         if (status === "done") {
             item.classList.add("check");
-            doingBtn.remove();
-            doneBtn.remove();
+            // doingBtn.remove();
+            // doneBtn.remove();
         }
 
         container.append(item, time, doingBtn, doneBtn);
@@ -92,6 +117,7 @@ function renderTasks() {
         if (wrapper) {
             wrapper.appendChild(container);
 
+            // Add validation to check if taskstatus is waiting or done befor rendering buttons
             doingBtn.addEventListener("click", () => {
 
                 task.status = "doing";
@@ -103,6 +129,8 @@ function renderTasks() {
             doneBtn.addEventListener("click", () => {
                 item.classList.add("check");
                 task.status = "done";
+                if (task.status === "done")
+                    doneBtn.textContent = "Ändra tillbaka";
                 localStorage.setItem("tasks", JSON.stringify(tasklist));
                 console.log("Du är klar med", chore, taskStatus);
 
@@ -113,15 +141,18 @@ function renderTasks() {
                 localStorage.setItem("tasks", JSON.stringify(tasklist));
                 console.log(taskStatus)
 
-
             })
         }
 
     })
 
-}
+};
 
-renderTasks();
+loadFromLocalStorage();
+
+
+// Create a function and HTML elements to call if user wants to remove whole list (from local storage)
+// deleteList();
 
 // Form logic
 form.addEventListener("submit", (e) => {
@@ -145,6 +176,5 @@ form.addEventListener("submit", (e) => {
     console.log(newTask);
     renderTasks();
     form.reset();
-    // localStorage.setItem(newTask);
 })
-console.log(form, taskInput, timeInput);
+// console.log(form, taskInput, timeInput);

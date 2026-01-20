@@ -37,6 +37,15 @@ html {
     }
 }
 
+.task-container {
+    border: 1px solid beige;
+    margin: 1rem;
+}
+
+.task-container.active {
+    box-shadow: 2px 2px 5px 0px palevioletred;
+}
+
 .task-item {
     color: grey;
 }
