@@ -10,16 +10,6 @@ interface ITask {
 type taskStatus = "waiting" | "doing" | "done";
 
 const tasklist: ITask[] = [
-    // {
-    //     id: 1,
-    //     chore: "Städa köket",
-    //     time: "40"
-    // },
-    // {
-    //     id: 2,
-    //     chore: "Diska",
-    //     time: "50"
-    // }
 ]
 
 // If there is data in local storage, get it
@@ -55,13 +45,22 @@ function clickEventOnContainer() {
             const container = target.closest(".task-container") as HTMLElement;
             if (!container) return;
 
-            // console.log("Du har klickat i: ", target);
-            // console.log("som tur var så hittade closest: ", container)
+            console.log("Du har klickat i: ", target);
+            console.log("som tur var så hittade closest: ", container)
         })
     }
 }
 
+// function createTaskElement(task: ITask): HTMLElement {
+
+
+
+//     return container;
+// }
+
 clickEventOnContainer();
+
+
 // Loop and render data in HTML
 function renderTasks() {
 
@@ -89,7 +88,7 @@ function renderTasks() {
 
         toggleBtn.classList.add(("done-btn"));
 
-        
+
         toggleBtn.textContent =
             status === "done" ? "Ångra" :
                 status === "doing" ? "Klart!" :
