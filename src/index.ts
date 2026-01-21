@@ -44,23 +44,24 @@ const timeInput = document.querySelector("#time-input") as HTMLSelectElement;
 const submitBtn = document.querySelector(".submit-btn") as HTMLButtonElement;
 
 let taskStatus = "waiting";
-console.log(taskStatus);
-
-if (wrapper) {
-    wrapper.addEventListener("click", (event) => {
-
-        const target = event.target as HTMLElement;
-        const container = target.closest(".task-container") as HTMLElement;
-        if (!container) return;
-
-        console.log("Du har klickat i: ", target);
-        console.log("som tur var så hittade closest: ", container)
-    })
 
 
+function clickEventOnContainer() {
 
+    if (wrapper) {
+        wrapper.addEventListener("click", (event) => {
+
+            const target = event.target as HTMLElement;
+            const container = target.closest(".task-container") as HTMLElement;
+            if (!container) return;
+
+            // console.log("Du har klickat i: ", target);
+            // console.log("som tur var så hittade closest: ", container)
+        })
+    }
 }
 
+clickEventOnContainer();
 // Loop and render data in HTML
 function renderTasks() {
 
@@ -81,67 +82,45 @@ function renderTasks() {
 
         container.dataset.id = id.toString();
 
-
-
         item.textContent = chore;
         timeSpan.textContent = time;
 
-        // Set types for classes here but it did not work
-        // if (taskStatus === "doing") {
-        //     item.classList.add("doing");
-        // } else if (taskStatus === "done") {
-        //     item.classList.add("check");
-        // }
+        const toggleBtn = document.createElement("button") as HTMLButtonElement;
 
-        const doingBtn = document.createElement("button") as HTMLButtonElement;
-        const doneBtn = document.createElement("button") as HTMLButtonElement;
+        toggleBtn.classList.add(("done-btn"));
 
-        doingBtn.classList.add("doing-btn");
-        doneBtn.classList.add(("done-btn"));
+        
+        toggleBtn.textContent =
+            status === "done" ? "Ångra" :
+                status === "doing" ? "Klart!" :
+                    "Jobba med sysslan nu";
 
-        doingBtn.textContent = "Jobbar med";
-        doneBtn.textContent = "Klart";
+
+        toggleBtn.addEventListener("click", () => {
+            if (task.status === "waiting") {
+                task.status = "doing";
+            } else if (task.status === "doing") {
+                task.status = "done";
+            } else {
+                task.status = "waiting";
+            }
+
+            localStorage.setItem("tasks", JSON.stringify(tasklist));
+            renderTasks();
+        });
 
         if (status === "doing") {
             item.classList.add("doing")
-            // doingBtn.remove();
         };
         if (status === "done") {
             item.classList.add("check");
-            // doingBtn.remove();
-            // doneBtn.remove();
         }
 
-        container.append(item, time, doingBtn, doneBtn);
+        container.append(item, time, toggleBtn);
 
         if (wrapper) {
             wrapper.appendChild(container);
 
-            // Add validation to check if taskstatus is waiting or done befor rendering buttons
-            doingBtn.addEventListener("click", () => {
-
-                task.status = "doing";
-
-                console.log("Jobbar med", chore), taskStatus;
-                item.classList.add("doing")
-            })
-
-            doneBtn.addEventListener("click", () => {
-                item.classList.add("check");
-                task.status = "done";
-                if (task.status === "done")
-                    doneBtn.textContent = "Ändra tillbaka";
-                localStorage.setItem("tasks", JSON.stringify(tasklist));
-                console.log("Du är klar med", chore, taskStatus);
-
-
-                // Removing the buttons from HTML, could be changed for a redo button
-                doneBtn.remove();
-                doingBtn.remove();
-                localStorage.setItem("tasks", JSON.stringify(tasklist));
-                console.log(taskStatus)
-
-            })
         }
 
     })
@@ -162,7 +141,6 @@ form.addEventListener("submit", (e) => {
 
     const task = taskInput.value;
     const time = timeInput.value;
-    console.log("!")
 
     const newTask: ITask = {
         id: Date.now(),
