@@ -1,7 +1,8 @@
 html {
-    /* text-align: center; */
+    text-align: center;
     /* width: 80vw; */
     margin: 3rem 20rem;
+    background-color: palevioletred;
 
     h1,
     h2,
@@ -9,7 +10,12 @@ html {
     h4,
     h5,
     h6,
-    label,
+    label {
+        color: blue;
+        font-family: "Ribeye", serif;
+    }
+
+
     a,
     ul,
     li,
@@ -21,16 +27,24 @@ html {
     input,
     span,
     button {
-        font-size: 1.2rem;
+        font-size: 1.6rem;
         margin: 0.2em;
+
     }
 
     .wrapper {
-
-
+        background-color: rgb(253, 253, 250);
+        padding: 2rem;
+        border-radius: 2rem;
 
         form {
             display: grid;
+        }
+
+        .list {
+            background-color: rgb(246, 242, 244);
+            padding: 2rem;
+            border-radius: 2rem;
         }
 
 
@@ -40,22 +54,35 @@ html {
 .task-container {
     border: 1px solid beige;
     margin: 1rem;
-}
-
-.task-container.active {
-    box-shadow: 2px 2px 5px 0px palevioletred;
-}
-
-.task-item {
-    color: grey;
-}
+    background-color: rgb(249, 249, 246);
+    border-radius: 2rem;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 
 
-.task-item.doing {
-    text-decoration: underline;
-}
+    .task-item {
+        color: palevioletred;
+        font-family: "Nerko One", cursive;
+    }
 
-.task-item.check {
-    text-decoration: line-through;
-    color: blue;
+
+    .task-item.doing {
+        text-decoration: underline;
+    }
+
+    .task-item.check {
+        text-decoration: line-through;
+        color: grey;
+    }
+
+    .task-time {
+        align-self: center;
+    }
+
+    .done-btn {
+        background-color: rgb(249, 249, 246);
+        border: none;
+        cursor: pointer;
+    }
 }

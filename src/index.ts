@@ -57,6 +57,7 @@ function createTaskElement(task: ITask): HTMLElement {
     const { chore, time, status, id } = task;
 
 
+
     const container = document.createElement("article");
     const item = document.createElement("span");
     const timeSpan = document.createElement("span");
@@ -69,17 +70,17 @@ function createTaskElement(task: ITask): HTMLElement {
     container.dataset.id = id.toString();
 
     item.textContent = chore;
-    timeSpan.textContent = time;
+    timeSpan.innerHTML = `<i class="fa-solid fa-stopwatch"></i>` + time;
 
     const toggleBtn = document.createElement("button") as HTMLButtonElement;
 
     toggleBtn.classList.add(("done-btn"));
 
 
-    toggleBtn.textContent =
-        status === "done" ? "Ångra" :
-            status === "doing" ? "Klart!" :
-                "Jobba med sysslan nu";
+    toggleBtn.innerHTML =
+        status === "done" ? `<i class="fa-solid fa-rotate-right"></i>` :
+            status === "doing" ? `<i class="fa-solid fa-circle-check"></i>` :
+                `<i class="fa-solid fa-circle-play fa-l"></i>`;
 
 
     toggleBtn.addEventListener("click", () => {
@@ -102,7 +103,7 @@ function createTaskElement(task: ITask): HTMLElement {
         item.classList.add("check");
     }
 
-    container.append(item, time, toggleBtn);
+    container.append(item, timeSpan, toggleBtn);
 
     return container;
 }
@@ -115,17 +116,21 @@ function renderTasks() {
 
     if (wrapper) {
         wrapper.replaceChildren();
+        const listTitle = document.createElement("h2");
+        listTitle.classList.add("listTitle");
+        listTitle.textContent = "Planerade sysslor";
+
+        wrapper.appendChild(listTitle);
+
     }
+
     tasklist.forEach((task) => {
         const singleTask = createTaskElement(task);
 
         if (wrapper) {
             wrapper.appendChild(singleTask);
-
         }
-
     })
-
 };
 
 loadFromLocalStorage();
