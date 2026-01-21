@@ -51,12 +51,61 @@ function clickEventOnContainer() {
     }
 }
 
-// function createTaskElement(task: ITask): HTMLElement {
+
+function createTaskElement(task: ITask): HTMLElement {
+
+    const { chore, time, status, id } = task;
 
 
+    const container = document.createElement("article");
+    const item = document.createElement("span");
+    const timeSpan = document.createElement("span");
 
-//     return container;
-// }
+
+    container.classList.add("task-container");
+    item.classList.add("task-item");
+    timeSpan.classList.add("task-time");
+
+    container.dataset.id = id.toString();
+
+    item.textContent = chore;
+    timeSpan.textContent = time;
+
+    const toggleBtn = document.createElement("button") as HTMLButtonElement;
+
+    toggleBtn.classList.add(("done-btn"));
+
+
+    toggleBtn.textContent =
+        status === "done" ? "Ångra" :
+            status === "doing" ? "Klart!" :
+                "Jobba med sysslan nu";
+
+
+    toggleBtn.addEventListener("click", () => {
+        if (task.status === "waiting") {
+            task.status = "doing";
+        } else if (task.status === "doing") {
+            task.status = "done";
+        } else {
+            task.status = "waiting";
+        }
+
+        localStorage.setItem("tasks", JSON.stringify(tasklist));
+        renderTasks();
+    });
+
+    if (status === "doing") {
+        item.classList.add("doing")
+    };
+    if (status === "done") {
+        item.classList.add("check");
+    }
+
+    container.append(item, time, toggleBtn);
+
+    return container;
+}
 
 clickEventOnContainer();
 
@@ -68,57 +117,10 @@ function renderTasks() {
         wrapper.replaceChildren();
     }
     tasklist.forEach((task) => {
-        const { chore, time, status, id } = task;
-
-        const container = document.createElement("article");
-        const item = document.createElement("span");
-        const timeSpan = document.createElement("span");
-
-
-        container.classList.add("task-container");
-        item.classList.add("task-item");
-        timeSpan.classList.add("task-time");
-
-        container.dataset.id = id.toString();
-
-        item.textContent = chore;
-        timeSpan.textContent = time;
-
-        const toggleBtn = document.createElement("button") as HTMLButtonElement;
-
-        toggleBtn.classList.add(("done-btn"));
-
-
-        toggleBtn.textContent =
-            status === "done" ? "Ångra" :
-                status === "doing" ? "Klart!" :
-                    "Jobba med sysslan nu";
-
-
-        toggleBtn.addEventListener("click", () => {
-            if (task.status === "waiting") {
-                task.status = "doing";
-            } else if (task.status === "doing") {
-                task.status = "done";
-            } else {
-                task.status = "waiting";
-            }
-
-            localStorage.setItem("tasks", JSON.stringify(tasklist));
-            renderTasks();
-        });
-
-        if (status === "doing") {
-            item.classList.add("doing")
-        };
-        if (status === "done") {
-            item.classList.add("check");
-        }
-
-        container.append(item, time, toggleBtn);
+        const singleTask = createTaskElement(task);
 
         if (wrapper) {
-            wrapper.appendChild(container);
+            wrapper.appendChild(singleTask);
 
         }
 
