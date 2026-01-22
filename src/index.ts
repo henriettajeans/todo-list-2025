@@ -13,7 +13,6 @@ const loadFromLocalStorage = () => {
     if (savedTasks) {
         const parsedTasks: ITask[] = JSON.parse(savedTasks) as ITask[];
         tasklist.push(...parsedTasks);
-
         renderTasks();
     }
 }
@@ -21,7 +20,8 @@ const loadFromLocalStorage = () => {
 const removeAllFromLocalStorage = () => {
 
     localStorage.clear();
-
+    // Resetting tasklist to empty
+    tasklist.length = 0;
     renderTasks();
 }
 
@@ -119,11 +119,6 @@ function renderTasks() {
         listTitle.classList.add("listTitle");
         listTitle.textContent = "Planerade sysslor";
 
-        // Adding a button to be able to clear array in local storage
-
-
-
-
 
         wrapper.appendChild(listTitle);
 
@@ -135,12 +130,15 @@ function renderTasks() {
             }
         })
 
+        // Adding a button to be able to clear array in local storage
+
         const removeAllTasksBtn = document.createElement("button");
         removeAllTasksBtn.classList.add("remove-all-btn");
         removeAllTasksBtn.textContent = "Ta bort allt";
+
         removeAllTasksBtn.addEventListener("click", () => {
             removeAllFromLocalStorage();
-            
+
         })
         wrapper.appendChild(removeAllTasksBtn);
     }
