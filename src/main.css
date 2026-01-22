@@ -51,6 +51,8 @@ html {
     }
 }
 
+
+
 .task-container {
     border: 1px solid beige;
     margin: 1rem;
@@ -60,12 +62,10 @@ html {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 
-
     .task-item {
         color: palevioletred;
         font-family: "Nerko One", cursive;
     }
-
 
     .task-item.doing {
         text-decoration: underline;
@@ -85,4 +85,7 @@ html {
         border: none;
         cursor: pointer;
     }
+}
+.task-container.hover {
+    border: 2px solid red;
 }

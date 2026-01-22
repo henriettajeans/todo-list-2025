@@ -17,7 +17,8 @@ const loadFromLocalStorage = () => {
     }
 }
 
-// TODO: add removeSingleTaskFromLocalStorage, add a trash can icon next to each task to remove and update LS array
+// TODO: create new function removeSingleTaskFromLocalStorage, add a trash can icon
+// next to each task to remove and update LS array
 
 const removeAllFromLocalStorage = () => {
     let removeState = window.confirm("Du kommer ta bort alla sysslor.")
@@ -40,15 +41,12 @@ const taskInput = document.querySelector("#task-input") as HTMLInputElement;
 const timeInput = document.querySelector("#time-input") as HTMLSelectElement;
 const submitBtn = document.querySelector(".submit-btn") as HTMLButtonElement;
 
-// let taskStatus = "waiting";
-
 
 function clickEventOnContainer() {
 
+
     if (wrapper) {
         wrapper.addEventListener("click", (event) => {
-
-            // TODO: change click to hover and add a class to wrapper for hover effect
 
             const target = event.target as HTMLElement;
             const container = target.closest(".task-container") as HTMLElement;
@@ -58,18 +56,32 @@ function clickEventOnContainer() {
             console.log("som tur var så hittade closest: ", container)
         })
     }
+
+}
+
+function hoverEventOnTask() {
+
+    if (!wrapper) return;
+    wrapper.addEventListener("mouseover", (event) => {
+        const target = event.target as HTMLElement;
+        const container = target.closest(".task-container") as HTMLElement;
+        if (!container) return;
+        const currentHover = document.querySelector(".task-container.hover")
+        if (currentHover) {
+            currentHover.classList.remove("hover");
+        }
+        container.classList.add("hover");
+        console.log("hovrar")
+    })
 }
 
 function createTaskElement(task: ITask): HTMLElement {
 
     const { chore, time, status, id } = task;
 
-
-
     const container = document.createElement("article");
     const item = document.createElement("span");
     const timeSpan = document.createElement("span");
-
 
     container.classList.add("task-container");
     item.classList.add("task-item");
@@ -112,12 +124,12 @@ function createTaskElement(task: ITask): HTMLElement {
     }
 
     container.append(item, timeSpan, toggleBtn);
-
     return container;
 }
 
 clickEventOnContainer();
 
+hoverEventOnTask();
 
 // Loop and render data in HTML
 function renderTasks() {
@@ -160,14 +172,11 @@ function renderTasks() {
 loadFromLocalStorage();
 
 
-
-// Create a function and HTML elements to call if user wants to remove whole list (from local storage)
-// deleteList();
-
 // Form logic
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
+    // If the input fields are empty- cancel this call
     if (!taskInput || !timeInput) return;
 
     const task = taskInput.value;
@@ -179,6 +188,8 @@ form.addEventListener("submit", (e) => {
         time: time,
         status: "waiting"
     }
+
+    // If there was data in the input fields, add them to tasklist array and set them to local storage
     tasklist.push(newTask);
 
     localStorage.setItem("tasks", JSON.stringify(tasklist));
@@ -186,4 +197,3 @@ form.addEventListener("submit", (e) => {
     renderTasks();
     form.reset();
 })
-// console.log(form, taskInput, timeInput);
