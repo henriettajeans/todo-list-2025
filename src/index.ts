@@ -1,4 +1,4 @@
-import type {ITask} from "./models/ITask.ts";
+import type { ITask } from "./models/ITask.ts";
 
 console.log("Good luck today!")
 
@@ -19,14 +19,7 @@ const loadFromLocalStorage = () => {
 }
 
 const removeAllFromLocalStorage = () => {
-    const savedTasks = localStorage.getItem("tasks");
 
-    if (savedTasks && wrapper) {
-        const removeAllTasksBtn = document.createElement("button");
-        removeAllTasksBtn.classList.add("remove-all-btn");
-        removeAllTasksBtn.textContent = "Ta bort allt";
-        wrapper.appendChild(removeAllTasksBtn);
-    }
     localStorage.clear();
 
     renderTasks();
@@ -126,17 +119,31 @@ function renderTasks() {
         listTitle.classList.add("listTitle");
         listTitle.textContent = "Planerade sysslor";
 
+        // Adding a button to be able to clear array in local storage
+
+
+
+
+
         wrapper.appendChild(listTitle);
 
+        tasklist.forEach((task) => {
+            const singleTask = createTaskElement(task);
+
+            if (wrapper) {
+                wrapper.appendChild(singleTask);
+            }
+        })
+
+        const removeAllTasksBtn = document.createElement("button");
+        removeAllTasksBtn.classList.add("remove-all-btn");
+        removeAllTasksBtn.textContent = "Ta bort allt";
+        removeAllTasksBtn.addEventListener("click", () => {
+            removeAllFromLocalStorage();
+            
+        })
+        wrapper.appendChild(removeAllTasksBtn);
     }
-
-    tasklist.forEach((task) => {
-        const singleTask = createTaskElement(task);
-
-        if (wrapper) {
-            wrapper.appendChild(singleTask);
-        }
-    })
 };
 
 loadFromLocalStorage();
