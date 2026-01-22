@@ -1,13 +1,7 @@
+import type {ITask} from "./models/ITask.ts";
+
 console.log("Good luck today!")
 
-interface ITask {
-    id: number,
-    chore: string,
-    time: string,
-    status: taskStatus
-}
-
-type taskStatus = "waiting" | "doing" | "done";
 
 const tasklist: ITask[] = [
 ]
@@ -24,6 +18,19 @@ const loadFromLocalStorage = () => {
     }
 }
 
+const removeAllFromLocalStorage = () => {
+    const savedTasks = localStorage.getItem("tasks");
+
+    if (savedTasks && wrapper) {
+        const removeAllTasksBtn = document.createElement("button");
+        removeAllTasksBtn.classList.add("remove-all-btn");
+        removeAllTasksBtn.textContent = "Ta bort allt";
+        wrapper.appendChild(removeAllTasksBtn);
+    }
+    localStorage.clear();
+
+    renderTasks();
+}
 
 // Variables
 
@@ -50,7 +57,6 @@ function clickEventOnContainer() {
         })
     }
 }
-
 
 function createTaskElement(task: ITask): HTMLElement {
 
@@ -134,6 +140,7 @@ function renderTasks() {
 };
 
 loadFromLocalStorage();
+
 
 
 // Create a function and HTML elements to call if user wants to remove whole list (from local storage)
