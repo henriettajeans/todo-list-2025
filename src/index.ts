@@ -17,12 +17,19 @@ const loadFromLocalStorage = () => {
     }
 }
 
-const removeAllFromLocalStorage = () => {
+// TODO: add removeSingleTaskFromLocalStorage, add a trash can icon next to each task to remove and update LS array
 
-    localStorage.clear();
-    // Resetting tasklist to empty
-    tasklist.length = 0;
-    renderTasks();
+const removeAllFromLocalStorage = () => {
+    let removeState = window.confirm("Du kommer ta bort alla sysslor.")
+    if (removeState === true) {
+        localStorage.clear();
+        // Resetting tasklist to empty
+        tasklist.length = 0;
+        renderTasks();
+    } else {
+        console.log("Du avbröt och listan är kvar")
+    }
+
 }
 
 // Variables
@@ -33,13 +40,15 @@ const taskInput = document.querySelector("#task-input") as HTMLInputElement;
 const timeInput = document.querySelector("#time-input") as HTMLSelectElement;
 const submitBtn = document.querySelector(".submit-btn") as HTMLButtonElement;
 
-let taskStatus = "waiting";
+// let taskStatus = "waiting";
 
 
 function clickEventOnContainer() {
 
     if (wrapper) {
         wrapper.addEventListener("click", (event) => {
+
+            // TODO: change click to hover and add a class to wrapper for hover effect
 
             const target = event.target as HTMLElement;
             const container = target.closest(".task-container") as HTMLElement;
@@ -137,9 +146,13 @@ function renderTasks() {
         removeAllTasksBtn.textContent = "Ta bort allt";
 
         removeAllTasksBtn.addEventListener("click", () => {
-            removeAllFromLocalStorage();
 
+            removeAllFromLocalStorage();
+            renderTasks();
+
+            // TODO: remove button and title after function is done
         })
+
         wrapper.appendChild(removeAllTasksBtn);
     }
 };
